@@ -3,6 +3,7 @@ package edu.nd.pmcburne.hello
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -18,8 +19,8 @@ import edu.nd.pmcburne.hello.ui.theme.TagDropdown
 
 class MainActivity : ComponentActivity() {
 
-    private val viewModel by lazy {
-        MainViewModel(
+    private val viewModel: MainViewModel by viewModels {
+        MainViewModelFactory(
             ApiService.create(),
             AppDatabase.getDatabase(this).placeDao()
         )
@@ -30,22 +31,21 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyApplicationTheme {
                 val uiState by viewModel.uiState.collectAsState()
+
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Column {
-                        // Dropdown at the top
                         TagDropdown(
                             selectedTag = uiState.selectedTag,
                             tags = uiState.uniqueTags,
                             onTagSelected = { viewModel.selectTag(it) }
                         )
-
-                        // Map shows only places with selected tag
                         MapViewScreen(
                             places = uiState.allPlaces.filter { place ->
-                                place.tags.split(",").map { it.trim() }.contains(uiState.selectedTag)
+                                place.tags.split(",").map { it.trim() }
+                                    .contains(uiState.selectedTag)
                             }
                         )
                     }

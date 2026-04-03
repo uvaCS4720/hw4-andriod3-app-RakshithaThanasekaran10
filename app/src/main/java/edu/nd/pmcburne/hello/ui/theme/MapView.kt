@@ -1,8 +1,6 @@
 package edu.nd.pmcburne.hello.ui.theme
 
-import android.util.Log
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -22,24 +20,8 @@ fun MapViewScreen(places: List<PlaceEntity>) {
         position = CameraPosition.fromLatLngZoom(defaultPosition, 15f)
     }
 
-    LaunchedEffect(places) {
-        if (places.isNotEmpty()) {
-            val firstPlace = places.first()
-            Log.d("MapDebug", "Camera moving to: ${firstPlace.name} = ${firstPlace.latitude}, ${firstPlace.longitude}")
-            cameraPositionState.move(
-                CameraUpdateFactory.newCameraPosition(
-                    CameraPosition.fromLatLngZoom(
-                        LatLng(firstPlace.latitude, firstPlace.longitude),
-                        15f
-                    )
-                )
-            )
-        }
-    }
-
     GoogleMap(cameraPositionState = cameraPositionState) {
         places.forEach { place ->
-            Log.d("MapDebug", "Adding marker: ${place.name} = ${place.latitude}, ${place.longitude}")
             Marker(
                 state = MarkerState(LatLng(place.latitude, place.longitude)),
                 title = place.name,

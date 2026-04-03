@@ -4,12 +4,12 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PlaceDao {
-
-    @Query("SELECT * FROM PlaceEntity")
-    suspend fun getAllPlaces(): List<PlaceEntity>  // <- return type must be List<PlaceEntity>
+    @Query("SELECT * FROM placeentity")
+    fun getAllPlacesFlow(): Flow<List<PlaceEntity>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertOrIgnore(place: PlaceEntity)

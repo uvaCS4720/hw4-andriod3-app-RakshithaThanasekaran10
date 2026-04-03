@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import android.util.Log
 
 @Composable
 fun TagDropdown(
@@ -14,18 +15,22 @@ fun TagDropdown(
     onTagSelected: (String) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var text by remember { mutableStateOf(selectedTag) }
 
     ExposedDropdownMenuBox(
         expanded = expanded,
-        onExpandedChange = { expanded = !expanded }
+        onExpandedChange = {
+            expanded = !expanded
+            Log.d("TagDropdown", "Dropdown expanded: $expanded")
+        }
     ) {
         OutlinedTextField(
-            value = text,
+            value = selectedTag,
             onValueChange = {},
             readOnly = true,
             label = { Text("Select Tag") },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .menuAnchor()
+                .fillMaxWidth(),
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) }
         )
 
@@ -37,7 +42,7 @@ fun TagDropdown(
                 DropdownMenuItem(
                     text = { Text(tag) },
                     onClick = {
-                        text = tag
+                        Log.d("TagDropdown", "Clicked tag: $tag")
                         expanded = false
                         onTagSelected(tag)
                     }
