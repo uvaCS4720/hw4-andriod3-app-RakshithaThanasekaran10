@@ -17,8 +17,10 @@ import edu.nd.pmcburne.hello.ui.theme.MapViewScreen
 import edu.nd.pmcburne.hello.ui.theme.MyApplicationTheme
 import edu.nd.pmcburne.hello.ui.theme.TagDropdown
 
+//main activity of the app using jetpack compose
 class MainActivity : ComponentActivity() {
 
+    //initiates viewmodel using factory that provides API
     private val viewModel: MainViewModel by viewModels {
         MainViewModelFactory(
             ApiService.create(),
@@ -28,7 +30,9 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // sets the content view using compose
         setContent {
+            //applies app theme
             MyApplicationTheme {
                 val uiState by viewModel.uiState.collectAsState()
 
@@ -37,11 +41,13 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Column {
+                        //drop down menu for selecting a tag
                         TagDropdown(
                             selectedTag = uiState.selectedTag,
                             tags = uiState.uniqueTags,
                             onTagSelected = { viewModel.selectTag(it) }
                         )
+                        //google map showing markers filtered by selected tag
                         MapViewScreen(
                             places = uiState.allPlaces.filter { place ->
                                 place.tags.split(",").map { it.trim() }
