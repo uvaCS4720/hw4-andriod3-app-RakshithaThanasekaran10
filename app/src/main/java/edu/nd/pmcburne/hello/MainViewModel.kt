@@ -11,23 +11,28 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+//represents the ui state for mainactivity
 data class MainUIState(
     val allPlaces: List<PlaceEntity> = emptyList(),
     val selectedTag: String = "core",
     val uniqueTags: List<String> = emptyList()
 )
 
+//viewmodel for viewmainactivity handling api, database, and ui state
 class MainViewModel(
     private val apiService: ApiService,
     private val placeDao: PlaceDao
 ) : ViewModel() {
 
+    //backing stateflow to hold mutable ui state
     private val _uiState = MutableStateFlow(MainUIState())
+
+    //exposed immutable stateflow for ui to observe
     val uiState: StateFlow<MainUIState> = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
-            // fetch API and insert into DB safely
+            // fetches API and inserts into DB safely
             try {
                 val places = apiService.getPlacements()
                 places.forEach { place ->
@@ -43,10 +48,10 @@ class MainViewModel(
                     )
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
+                e.printStackTrace() //handles api/network errors
             }
 
-            // Observe DB
+            // Observes DB changes and updates ui state
             placeDao.getAllPlacesFlow().collectLatest { allPlaces ->
                 val tags = allPlaces
                     .flatMap { it.tags.split(",") }
@@ -56,13 +61,14 @@ class MainViewModel(
 
                 _uiState.value = MainUIState(
                     allPlaces = allPlaces,
-                    selectedTag = "core",
+                    selectedTag = "core", //resets selected tag on refresh
                     uniqueTags = tags
                 )
             }
         }
     }
 
+    //updates selected tag in ui state
     fun selectTag(tag: String) {
         _uiState.value = _uiState.value.copy(selectedTag = tag)
     }
