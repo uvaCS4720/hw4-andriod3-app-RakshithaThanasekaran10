@@ -8,14 +8,17 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import android.util.Log
 
+//composable for a dropdown menu to select a tag from a list
 @Composable
 fun TagDropdown(
     selectedTag: String,
     tags: List<String>,
     onTagSelected: (String) -> Unit
 ) {
+    // tracks whether the dropdown menu is collapsed or expanded
     var expanded by remember { mutableStateOf(false) }
 
+    // box that manages dropdown state and anchors menu
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = {
@@ -23,6 +26,7 @@ fun TagDropdown(
             Log.d("TagDropdown", "Dropdown expanded: $expanded")
         }
     ) {
+        //text field showing the currently selected tag
         OutlinedTextField(
             value = selectedTag,
             onValueChange = {},
@@ -34,6 +38,7 @@ fun TagDropdown(
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) }
         )
 
+        //actual drop down containing tags
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false }
