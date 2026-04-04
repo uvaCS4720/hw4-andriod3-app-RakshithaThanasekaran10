@@ -1,1 +1,9 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/e4rOHRfR)
+Name: Rakshitha Thanasekaran
+Computing ID: nka8qg
+
+Sources used to complete assignment:
+1) google maps api : https://mapsplatform.google.com/lp/maps-apis/
+2) room database help : https://developer.android.com/training/data-storage/room
+3) android developers retrofit: https://square.github.io/retrofit/
+4) google maps compose : https://developers.google.com/maps/documentation/android-sdk/maps-compose
+5) ChatGPT: used to help debug some functionality such as drop down menu not opening, used chat for conceptual help and debugging.
